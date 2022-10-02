@@ -1,2 +1,2 @@
 # aurore-wagtail
-The backend for project Aurore will go here
+The CMS backend for project Aurore will go here
