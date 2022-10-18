@@ -1,8 +1,13 @@
 """Wagtail Models"""
 from django.db import models
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import (FieldPanel, InlinePanel, MultiFieldPanel,
-                                  ObjectList, TabbedInterface)
+from wagtail.admin.panels import (
+    FieldPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    ObjectList,
+    TabbedInterface,
+)
 from wagtail.api import APIField
 from wagtail.fields import StreamField
 from wagtail.models import Orderable, Page
@@ -58,10 +63,6 @@ class HomePage(CorePage):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel("body"),
-    ]
-
-    hero_panels = [
         MultiFieldPanel(
             [
                 FieldPanel("headline", classname="full"),
@@ -74,11 +75,11 @@ class HomePage(CorePage):
             heading="Carousel Images",
             classname="collapsible",
         ),
+        FieldPanel("body"),
     ]
 
     edit_handler = TabbedInterface(
         [
-            ObjectList(hero_panels, heading="Hero Section"),
             ObjectList(content_panels, heading="Content"),
             ObjectList(Page.promote_panels, heading="SEO Settings"),
             ObjectList(Page.settings_panels, heading="Settings"),
