@@ -1,8 +1,18 @@
 """Streamfields live in here."""
 
-from wagtail.blocks import CharBlock, ListBlock, StreamBlock, StructBlock, TextBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
+
+from wagtail.blocks import (
+    BooleanBlock,
+    CharBlock,
+    ListBlock,
+    StreamBlock,
+    StructBlock,
+    TextBlock,
+    URLBlock,
+    StructValue,
+)
 
 from .serializers import WagtailDocumentSerializer, WagtailImageSerializer
 
@@ -28,6 +38,40 @@ class TitleAndTextBlock(StructBlock):
         label = "Title & Text"
 
 
+class LinkStructValue(StructValue):
+    """Additional logic for our urls."""
+
+    def url(self):
+        link_url = self.get("link_url")
+        if link_url:
+            return link_url
+
+        return "#"
+
+
+class CTABlock(StructBlock):
+    """A simple call to action lint or button"""
+
+    text = CharBlock(
+        required=True,
+        default="Learn More",
+        max_length=40,
+        help_text="This is the text that appears on the link or button",
+    )
+
+    link_url = URLBlock(
+        required=False,
+        help_text="If the link page above is selected, that will be used first.",  # noqa
+    )
+    open_in_new_tab = BooleanBlock(default=False, required=False)
+
+    class Meta:  # noqa
+        template = "streams/cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"
+        value_class = LinkStructValue
+
+
 class MediaBlock(StreamBlock):
     """Media block: image or document."""
 
@@ -48,6 +92,7 @@ class SimpleCardBlock(StructBlock):
         required=True, help_text="Add your title and text for this card"
     )
     media = MediaBlock(required=False, help_text="Add an image or document")
+    button_link = CTABlock(required=False)
 
     class Meta:  # noqa
         icon = "placeholder"
@@ -59,36 +104,21 @@ Landing page blocks live below here.
 """
 
 
-class AboutSectionBlock(StructBlock):
-    """About section block for landing page."""
-
-    title_and_text = TitleAndTextBlock(
-        required=True, help_text="Add the title and subtitle for this section"
-    )
-    cards = ListBlock(SimpleCardBlock, required=False, help_text="Add about cards")
-
-    class Meta:  # noqa
-        icon = "edit"
-        label = "About Section"
-
-
 class ExploreSectionBlock(StructBlock):
     """Explore section block for landing page."""
 
     title_and_text = TitleAndTextBlock(
         required=True, help_text="Add your title and subtitle for the explore section"
     )
-    cards = ListBlock(
-        MediaBlock, required=False, help_text="Add medias for the explore section"
-    )
+    cards = ListBlock(SimpleCardBlock, required=False, help_text="Add about cards")
 
     class Meta:  # noqa
         icon = "edit"
         label = "Explore Section"
 
 
-class HowItWorksSectionBlock(StructBlock):
-    """How it works section block for landing page."""
+class HowSectionBlock(StructBlock):
+    """How section block for landing page."""
 
     title_and_text = TitleAndTextBlock(
         required=True, help_text="Add title and subtitle for this section"
@@ -97,24 +127,24 @@ class HowItWorksSectionBlock(StructBlock):
 
     class Meta:  # noqa
         icon = "placeholder"
-        label = "How It Works Section"
+        label = "How Section"
 
 
-class ProjectRoadMapSectionBlock(StructBlock):
-    """Project roadmap section block for landing page."""
+class ProjectSectionBlock(StructBlock):
+    """Project section block for landing page."""
 
     title_and_text = TitleAndTextBlock(
-        required=True, help_text="Title and subtitle for project roadmap section"
+        required=True, help_text="Title and subtitle for project section"
     )
-    cards = ListBlock(SimpleCardBlock, required=False, help_text="Add roadmap items")
+    cards = ListBlock(SimpleCardBlock, required=False, help_text="Add items")
 
     class Meta:  # noqa
         icon = "edit"
-        label = "Project Roadmap Section"
+        label = "Project Section"
 
 
 class CategoriesSectionBlock(StructBlock):
-    """Categories section block for landing page."""
+    """Categories section block for page."""
 
     title_and_text = TitleAndTextBlock(
         required=True, help_text="Add your title and text"
@@ -129,13 +159,10 @@ class CategoriesSectionBlock(StructBlock):
 class LandingPageBlock(StreamBlock):
     """Landing page block."""
 
-    brand_logos = ListBlock(
-        APIImageChooserBlock, required=False, help_text="Add brand logos"
-    )
-    about_section = AboutSectionBlock(required=False)
+    logos = ListBlock(APIImageChooserBlock, required=False, help_text="Add brand logos")
     explore_section = ExploreSectionBlock(required=False)
-    how_it_works_section = HowItWorksSectionBlock(required=False)
-    project_roadmap_section = ProjectRoadMapSectionBlock(required=False)
+    how_section = HowSectionBlock(required=False)
+    project_section = ProjectSectionBlock(required=False)
     categories_section = CategoriesSectionBlock(required=False)
 
     class Meta:  # noqa

@@ -12,7 +12,7 @@ from wagtail.api import APIField
 from wagtail.fields import StreamField
 from wagtail.models import Orderable, Page
 
-from .blocks import LandingPageBlock
+from .blocks import LandingPageBlock, CTABlock
 
 
 class CorePage(Page):
@@ -55,6 +55,17 @@ class HomePage(CorePage):
     sub_headline = models.CharField(
         max_length=255, help_text="Write the sub-headline for your website"
     )
+    ctas = StreamField(
+        [
+            ("cta", CTABlock()),
+        ],
+        null=True,
+        blank=True,
+        use_json_field=True,
+        verbose_name="call of action",
+        help_text="The Call to Actions Buttons on your page",
+    )
+
     body = StreamField(
         LandingPageBlock(),
         verbose_name="content block",

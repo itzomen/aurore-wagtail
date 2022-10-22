@@ -1,2 +1,2 @@
-# aurore-wagtail
-The CMS backend for project Aurore
+# Aurore CMS Backend
+The starter CMS backend for Aurore
