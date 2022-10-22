@@ -32,5 +32,5 @@ class UserInitSerializer(serializers.Serializer):
 class UserFilterSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     # Important: If we use BooleanField, it will default to False
-    is_admin = serializers.NullBooleanField(required=False)
+    is_admin = serializers.BooleanField(required=False)
     email = serializers.EmailField(required=False)
