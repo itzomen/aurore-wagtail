@@ -117,19 +117,6 @@ class ExploreSectionBlock(StructBlock):
         label = "Explore Section"
 
 
-class ProjectSectionBlock(StructBlock):
-    """Project section block for landing page."""
-
-    title_and_text = TitleAndTextBlock(
-        required=True, help_text="Title and subtitle for project section"
-    )
-    cards = ListBlock(SimpleCardBlock, required=False, help_text="Add items")
-
-    class Meta:  # noqa
-        icon = "edit"
-        label = "Project Section"
-
-
 class CategoriesSectionBlock(StructBlock):
     """Categories section block for page."""
 
@@ -146,9 +133,12 @@ class CategoriesSectionBlock(StructBlock):
 class LandingPageBlock(StreamBlock):
     """Landing page block."""
 
+    media = MediaBlock(required=False)
+    link = CTABlock(required=False)
+    text_and_title = TitleAndTextBlock(required=False)
+    card = SimpleCardBlock(required=False)
     logos = ListBlock(APIImageChooserBlock, required=False, help_text="Add brand logos")
     explore_section = ExploreSectionBlock(required=False)
-    project_section = ProjectSectionBlock(required=False)
     categories_section = CategoriesSectionBlock(required=False)
 
     class Meta:  # noqa
