@@ -41,9 +41,9 @@ The Aurore CMS backend is built with:
 
 ## [Demo](https://aurore-cms.herokuapp.com/cms)
 
-> > > Email: `admin@email.com`
+> Email: `admin@email.com`
 
-> > > Password: `password`
+> Password: `password`
 
 ## Setup
 
